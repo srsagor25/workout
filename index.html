@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PPL — Push / Pull / Legs</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">PPL</span>
+      <span class="brand-sub">Push · Pull · Legs</span>
+    </div>
+    <div class="today-pill" id="todayPill">—</div>
+  </header>
+
+  <main class="container">
+    <!-- Weekday selector -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Your Week</h2>
+        <p class="muted">Tap a day to cycle through Push → Pull → Legs → Rest. Saved automatically.</p>
+      </div>
+      <div class="week-grid" id="weekGrid"></div>
+      <div class="row gap end">
+        <button class="btn ghost" id="presetBtn">Preset: P/P/L/Rest/P/P/L</button>
+        <button class="btn ghost" id="resetWeekBtn">Reset Week</button>
+      </div>
+    </section>
+
+    <!-- Today's workout -->
+    <section class="card">
+      <div class="card-head row between">
+        <div>
+          <h2>Today's Workout</h2>
+          <p class="muted" id="workoutSubtitle">—</p>
+        </div>
+        <div class="session-timer">
+          <span class="timer-label">Session</span>
+          <span class="timer-value" id="sessionTime">00:00</span>
+          <div class="row gap">
+            <button class="btn small" id="sessionToggle">Start</button>
+            <button class="btn small ghost" id="sessionReset">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-tabs" id="dayTabs">
+        <button data-day="push" class="tab active">Push</button>
+        <button data-day="pull" class="tab">Pull</button>
+        <button data-day="legs" class="tab">Legs</button>
+      </div>
+
+      <div class="exercises" id="exerciseList"></div>
+    </section>
+
+    <!-- Featured machine video -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Latest Machine Tutorial</h2>
+        <p class="muted" id="videoCaption">Pulls the freshest YouTube results, sorted by upload date.</p>
+      </div>
+      <a id="ytHero" class="yt-hero" target="_blank" rel="noopener" href="#">
+        <div class="yt-hero-bg" id="ytHeroBg"></div>
+        <div class="yt-hero-inner">
+          <div class="yt-play" aria-hidden="true">
+            <svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.52 7.74a8 8 0 0 0-5.62-5.66C55.94 1 34 1 34 1s-21.94 0-26.9 1.08a8 8 0 0 0-5.62 5.66A83.7 83.7 0 0 0 0 24a83.7 83.7 0 0 0 1.48 16.26 8 8 0 0 0 5.62 5.66C12.06 47 34 47 34 47s21.94 0 26.9-1.08a8 8 0 0 0 5.62-5.66A83.7 83.7 0 0 0 68 24a83.7 83.7 0 0 0-1.48-16.26z" fill="#ff0000"/><path d="M27 34l18-10-18-10z" fill="#fff"/></svg>
+          </div>
+          <div class="yt-hero-meta">
+            <div class="yt-hero-kicker" id="ytHeroKicker">YOUTUBE · LATEST</div>
+            <div class="yt-hero-title" id="ytHeroTitle">—</div>
+            <div class="yt-hero-sub">Opens YouTube search · sorted by upload date</div>
+          </div>
+        </div>
+      </a>
+    </section>
+  </main>
+
+  <!-- Floating rest timer -->
+  <div class="rest-dock" id="restDock">
+    <div class="rest-head">
+      <span class="rest-title">Rest Timer</span>
+      <span class="rest-display" id="restDisplay">01:30</span>
+    </div>
+    <div class="rest-presets">
+      <button data-secs="45">45s</button>
+      <button data-secs="60">60s</button>
+      <button data-secs="90" class="active">90s</button>
+      <button data-secs="120">2m</button>
+      <button data-secs="180">3m</button>
+    </div>
+    <div class="rest-controls">
+      <button class="btn primary" id="restStart">Start</button>
+      <button class="btn ghost" id="restPause">Pause</button>
+      <button class="btn ghost" id="restReset">Reset</button>
+    </div>
+  </div>
+
+  <footer class="foot muted">
+    Built for Vercel · static HTML/CSS/JS · no backend
+  </footer>
+
+  <audio id="dingAudio" preload="auto">
+    <source src="data:audio/wav;base64,UklGRkgAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YSQAAAA=" type="audio/wav" />
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
