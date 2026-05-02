@@ -973,6 +973,48 @@ const editorCancelBtn      = document.getElementById('editorCancelBtn');
 const DAY_ACCENTS = ['#ff8a72', '#94b8ff', '#92dca6', '#d8a4ff', '#ffd166', '#73d2de', '#f4978e'];
 const DAY_ICONS   = ['fitness_center', 'arrow_upward', 'arrow_downward', 'directions_run', 'sports_martial_arts', 'pool', 'self_improvement'];
 
+// Build a name → exercise-defaults map from every program (built-in + custom).
+// Used by the editor to suggest known exercises and auto-fill the YouTube URL.
+function buildExerciseLibrary() {
+  const map = new Map();
+  for (const program of [...BUILTIN_IDS.map((id) => BUILTIN_PROGRAMS[id]), ...customPrograms]) {
+    for (const day of program.days) {
+      for (const ex of day.exercises) {
+        const key = (ex.name || '').trim().toLowerCase();
+        if (!key) continue;
+        const existing = map.get(key);
+        // Prefer entries that actually have a URL
+        if (!existing || (!existing.url && ex.url)) {
+          map.set(key, {
+            name: ex.name.trim(),
+            sets: ex.sets, reps: ex.reps, restSec: ex.restSec, url: ex.url || '',
+          });
+        }
+      }
+    }
+  }
+  return map;
+}
+
+function refreshExerciseDatalist() {
+  let dl = document.getElementById('exercise-library');
+  if (!dl) {
+    dl = document.createElement('datalist');
+    dl.id = 'exercise-library';
+    document.body.appendChild(dl);
+  }
+  const lib = editorState ? editorState.library : buildExerciseLibrary();
+  dl.innerHTML = '';
+  // Sorted alphabetically for nicer suggestions
+  const sorted = [...lib.values()].sort((a, b) => a.name.localeCompare(b.name));
+  for (const item of sorted) {
+    const opt = document.createElement('option');
+    opt.value = item.name;
+    if (item.url) opt.label = '🎬 with demo video';
+    dl.appendChild(opt);
+  }
+}
+
 function openEditor(mode, source) {
   if (mode === 'create') {
     const days = Array.from({ length: 7 }, (_, i) => makeBlankDay(i));
@@ -1008,6 +1050,8 @@ function openEditor(mode, source) {
     editorState = { mode, program: deepClone(source), originalId: source.id };
     editorTitle.textContent = 'Edit Program';
   }
+  editorState.library = buildExerciseLibrary();
+  refreshExerciseDatalist();
   showPage('editor');
   renderEditor();
 }
@@ -1080,7 +1124,8 @@ function renderEditor() {
         row.className = 'editor-ex';
         row.innerHTML = `
           <div class="editor-ex-grid">
-            <input class="input-field ex-name" type="text" value="${escapeHtml(ex.name)}" placeholder="Exercise name" />
+            <input class="input-field ex-name" type="text" list="exercise-library" autocomplete="off"
+              value="${escapeHtml(ex.name)}" placeholder="Type to search library or write your own" />
             <label class="num-label">Sets <input class="input-field" type="number" min="1" max="20" value="${ex.sets}" data-field="sets" /></label>
             <label class="num-label">Reps <input class="input-field" type="number" min="1" max="100" value="${ex.reps}" data-field="reps" /></label>
             <label class="num-label">Rest s <input class="input-field" type="number" min="0" max="600" value="${ex.restSec}" data-field="restSec" /></label>
@@ -1088,10 +1133,43 @@ function renderEditor() {
               <span class="material-symbols-rounded">delete</span>
             </button>
           </div>
-          <input class="input-field url-input" type="url" value="${escapeHtml(ex.url || '')}" placeholder="YouTube URL (optional)" />
+          <div class="url-row">
+            <input class="input-field url-input" type="url" value="${escapeHtml(ex.url || '')}" placeholder="YouTube URL (optional)" />
+            <span class="library-hint" data-hint hidden>
+              <span class="material-symbols-rounded" style="font-size:14px">smart_display</span>
+              Auto-filled from library
+            </span>
+          </div>
         `;
-        row.querySelector('.ex-name').addEventListener('input', (e) => { ex.name = e.target.value; });
-        row.querySelector('.url-input').addEventListener('input', (e) => { ex.url = e.target.value; });
+        const nameInput = row.querySelector('.ex-name');
+        const urlInput  = row.querySelector('.url-input');
+        const setsInput = row.querySelector('[data-field="sets"]');
+        const repsInput = row.querySelector('[data-field="reps"]');
+        const restInput = row.querySelector('[data-field="restSec"]');
+        const hintEl    = row.querySelector('[data-hint]');
+
+        nameInput.addEventListener('input', (e) => {
+          const v = e.target.value;
+          ex.name = v;
+          const match = editorState.library.get(v.trim().toLowerCase());
+          if (!match) return;
+          // Auto-fill URL when library entry has one and user hasn't set a custom URL
+          if (match.url && (!ex.url || ex.url === match.url)) {
+            ex.url = match.url;
+            urlInput.value = match.url;
+            hintEl.hidden = false;
+            setTimeout(() => { hintEl.hidden = true; }, 2500);
+          }
+          // Auto-fill sets/reps/rest only if they're still the blank-exercise defaults
+          const isDefault = ex.sets === 3 && ex.reps === 10 && ex.restSec === 60;
+          if (isDefault) {
+            ex.sets = match.sets; ex.reps = match.reps; ex.restSec = match.restSec;
+            setsInput.value = match.sets;
+            repsInput.value = match.reps;
+            restInput.value = match.restSec;
+          }
+        });
+        urlInput.addEventListener('input', (e) => { ex.url = e.target.value; });
         row.querySelectorAll('[data-field]').forEach((input) => {
           input.addEventListener('input', (e) => {
             const v = Number(e.target.value);

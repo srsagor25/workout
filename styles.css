@@ -946,7 +946,26 @@ html, body {
   letter-spacing: 0.3px;
 }
 .num-label .input-field { padding: 7px 9px; font-size: 13px; }
-.url-input { font-size: 13px; padding: 8px 10px; }
+.url-input { font-size: 13px; padding: 8px 10px; flex: 1; }
+.url-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.library-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--md-success);
+  background: color-mix(in srgb, var(--md-success) 15%, transparent);
+  padding: 4px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
 .add-ex-btn { padding-left: 8px; padding-right: 8px; }
 
 .editor-week-row {
