@@ -1,5 +1,5 @@
 // =================================================================
-// Workout Tracker — multi-program edition
+// Workout Helper — multi-program edition
 // Vanilla JS, MD3 styling, localStorage persistence
 // =================================================================
 
@@ -17,10 +17,10 @@ const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 // Built-in programs
 // =================================================================
 const BUILTIN_PROGRAMS = {
-  starbase: {
-    id: 'starbase',
-    name: 'STARBASE 2.0',
-    subtitle: '4-day Full Body split (PDF-sourced)',
+  full_body_4day: {
+    id: 'full_body_4day',
+    name: 'Full Body 4-Day',
+    subtitle: '4-day Full Body split with weak-point work',
     builtin: true,
     days: [
       {
@@ -56,8 +56,8 @@ const BUILTIN_PROGRAMS = {
       {
         id: 'day4', name: 'Arms', accent: '#d8a4ff', icon: 'looks_4',
         exercises: [
-          { id: 'd4w1', name: 'Weak Point Exercise #1 (pick from PDF)', sets: 3, reps: 10, restSec: 60, url: '' },
-          { id: 'd4w2', name: 'Weak Point Exercise #2 (pick from PDF)', sets: 2, reps: 10, restSec: 60, url: '' },
+          { id: 'd4w1', name: 'Weak Point Exercise #1', sets: 3, reps: 10, restSec: 60, url: '' },
+          { id: 'd4w2', name: 'Weak Point Exercise #2', sets: 2, reps: 10, restSec: 60, url: '' },
           { id: 'd4e1', name: 'DB Scott Curl',           sets: 3, reps: 11, restSec: 60, url: 'https://youtu.be/u00CqDeAHTE?si=Bvy35Dc_hcTjT9pK' },
           { id: 'd4e2', name: 'Close-Grip Assisted Dip', sets: 3, reps: 8,  restSec: 60, url: 'https://youtu.be/mpcPTUAhfto?si=VHNG-WmxfbY9hmjn' },
           { id: 'd4e3', name: 'Spider Curl',             sets: 2, reps: 13, restSec: 60, url: 'https://youtu.be/jw9tvoGLJmo?si=fWwgK9iG6AFc6eLz' },
@@ -135,8 +135,8 @@ function saveCustomPrograms() {
 }
 
 function loadActiveProgramId() {
-  const id = localStorage.getItem(K_ACTIVE) || 'starbase';
-  return id;
+  const id = localStorage.getItem(K_ACTIVE) || 'full_body_4day';
+  return id === 'starbase' ? 'full_body_4day' : id;
 }
 function saveActiveProgramId() {
   localStorage.setItem(K_ACTIVE, activeProgramId);
@@ -166,18 +166,32 @@ function saveCurrent() {
   else localStorage.removeItem(K_CURRENT);
 }
 
-// One-shot migration: old per-app week → starbase week
-function migrateLegacyWeek() {
-  if (weeks.starbase) return;
-  const raw = localStorage.getItem(K_WEEK_LEGACY);
-  if (!raw) return;
-  try {
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed) && parsed.length === 7) {
-      weeks.starbase = parsed;
-      saveWeeks();
+// One-shot migrations:
+//  - rename legacy 'starbase' program key to 'full_body_4day'
+//  - import the very old per-app K_WEEK_LEGACY blob as the default program's week
+function runMigrations() {
+  let dirty = false;
+  if (weeks.starbase && !weeks.full_body_4day) {
+    weeks.full_body_4day = weeks.starbase;
+    delete weeks.starbase;
+    dirty = true;
+  }
+  if (!weeks.full_body_4day) {
+    const raw = localStorage.getItem(K_WEEK_LEGACY);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length === 7) {
+          weeks.full_body_4day = parsed;
+          dirty = true;
+        }
+      } catch {}
     }
-  } catch {}
+  }
+  if (dirty) saveWeeks();
+  if (localStorage.getItem(K_ACTIVE) === 'starbase') {
+    localStorage.setItem(K_ACTIVE, 'full_body_4day');
+  }
 }
 
 // =================================================================
@@ -186,7 +200,7 @@ function migrateLegacyWeek() {
 let customPrograms = loadCustomPrograms();
 let activeProgramId = loadActiveProgramId();
 let weeks = loadWeeks();
-migrateLegacyWeek();
+runMigrations();
 
 let history = loadHistory();
 let current = loadCurrent();
@@ -204,7 +218,7 @@ function getProgram(id) {
   return BUILTIN_PROGRAMS[id] || customPrograms.find((p) => p.id === id) || null;
 }
 function getActiveProgram() {
-  return getProgram(activeProgramId) || BUILTIN_PROGRAMS.starbase;
+  return getProgram(activeProgramId) || BUILTIN_PROGRAMS.full_body_4day;
 }
 function isBuiltin(id) {
   return BUILTIN_IDS.includes(id);
@@ -932,7 +946,7 @@ function handleProgramAction(id, action) {
     delete weeks[id];
     saveWeeks();
     if (activeProgramId === id) {
-      activeProgramId = 'starbase';
+      activeProgramId = 'full_body_4day';
       saveActiveProgramId();
       activeTab = pickDefaultActiveTab();
       renderAll();
