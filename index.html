@@ -3,90 +3,166 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a1b1e" />
   <title>PPL — Push / Pull / Legs</title>
-  <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <span class="logo">PPL</span>
-      <span class="brand-sub">Push · Pull · Legs</span>
+  <!-- Top app bar -->
+  <header class="app-bar">
+    <div class="app-bar-row">
+      <div class="brand">
+        <span class="material-symbols-rounded brand-icon">fitness_center</span>
+        <div class="brand-text">
+          <div class="brand-title">PPL Tracker</div>
+          <div class="brand-sub" id="todaySub">—</div>
+        </div>
+      </div>
+      <div class="app-bar-actions">
+        <button class="icon-btn" id="historyBtn" aria-label="History">
+          <span class="material-symbols-rounded">history</span>
+        </button>
+        <button class="icon-btn" id="planBtn" aria-label="Plan">
+          <span class="material-symbols-rounded">calendar_month</span>
+        </button>
+      </div>
     </div>
-    <div class="today-pill" id="todayPill">—</div>
   </header>
 
   <main class="container">
-    <!-- Weekday selector -->
-    <section class="card">
-      <div class="card-head">
-        <h2>Your Week</h2>
-        <p class="muted">Tap a day to cycle through Push → Pull → Legs → Rest. Saved automatically.</p>
-      </div>
-      <div class="week-grid" id="weekGrid"></div>
-      <div class="row gap end">
-        <button class="btn ghost" id="presetBtn">Preset: P/P/L/Rest/P/P/L</button>
-        <button class="btn ghost" id="resetWeekBtn">Reset Week</button>
-      </div>
-    </section>
 
-    <!-- Today's workout -->
-    <section class="card">
-      <div class="card-head row between">
-        <div>
-          <h2>Today's Workout</h2>
-          <p class="muted" id="workoutSubtitle">—</p>
+    <!-- Page: Today -->
+    <section class="page" id="page-today">
+
+      <!-- Week chips -->
+      <div class="surface-card filled">
+        <div class="card-head">
+          <h2 class="title-medium">Your Week</h2>
+          <p class="body-small on-surface-variant">Tap a day to cycle Push → Pull → Legs → Rest. Saved automatically.</p>
         </div>
-        <div class="session-timer">
-          <span class="timer-label">Session</span>
-          <span class="timer-value" id="sessionTime">00:00</span>
-          <div class="row gap">
-            <button class="btn small" id="sessionToggle">Start</button>
-            <button class="btn small ghost" id="sessionReset">Reset</button>
-          </div>
+        <div class="week-row" id="weekGrid"></div>
+        <div class="row gap end mt-12">
+          <button class="btn text" id="presetBtn">
+            <span class="material-symbols-rounded">auto_awesome</span>Preset
+          </button>
+          <button class="btn text" id="resetWeekBtn">
+            <span class="material-symbols-rounded">refresh</span>Reset
+          </button>
         </div>
       </div>
 
-      <div class="day-tabs" id="dayTabs">
-        <button data-day="push" class="tab active">Push</button>
-        <button data-day="pull" class="tab">Pull</button>
-        <button data-day="legs" class="tab">Legs</button>
-      </div>
-
-      <div class="exercises" id="exerciseList"></div>
-    </section>
-
-    <!-- Featured machine video -->
-    <section class="card">
-      <div class="card-head">
-        <h2>Latest Machine Tutorial</h2>
-        <p class="muted" id="videoCaption">Pulls the freshest YouTube results, sorted by upload date.</p>
-      </div>
-      <a id="ytHero" class="yt-hero" target="_blank" rel="noopener" href="#">
-        <div class="yt-hero-bg" id="ytHeroBg"></div>
-        <div class="yt-hero-inner">
-          <div class="yt-play" aria-hidden="true">
-            <svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.52 7.74a8 8 0 0 0-5.62-5.66C55.94 1 34 1 34 1s-21.94 0-26.9 1.08a8 8 0 0 0-5.62 5.66A83.7 83.7 0 0 0 0 24a83.7 83.7 0 0 0 1.48 16.26 8 8 0 0 0 5.62 5.66C12.06 47 34 47 34 47s21.94 0 26.9-1.08a8 8 0 0 0 5.62-5.66A83.7 83.7 0 0 0 68 24a83.7 83.7 0 0 0-1.48-16.26z" fill="#ff0000"/><path d="M27 34l18-10-18-10z" fill="#fff"/></svg>
+      <!-- Workout card -->
+      <div class="surface-card elevated">
+        <div class="card-head row between wrap">
+          <div>
+            <div class="row gap-8">
+              <span class="chip-tone" id="routineChip">PUSH</span>
+              <span class="chip-outline" id="durationChip">~ 45 min</span>
+            </div>
+            <h2 class="headline-small mt-8" id="workoutTitle">Today's Workout</h2>
+            <p class="body-small on-surface-variant" id="workoutSubtitle">—</p>
           </div>
-          <div class="yt-hero-meta">
-            <div class="yt-hero-kicker" id="ytHeroKicker">YOUTUBE · LATEST</div>
-            <div class="yt-hero-title" id="ytHeroTitle">—</div>
-            <div class="yt-hero-sub">Opens YouTube search · sorted by upload date</div>
+          <div class="session-timer">
+            <div class="label-small on-surface-variant">SESSION</div>
+            <div class="timer-display" id="sessionTime">00:00</div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="sessionProgress"></div>
+            </div>
+            <div class="row gap-6">
+              <button class="btn tonal small" id="sessionToggle">
+                <span class="material-symbols-rounded" id="sessionIcon">play_arrow</span>
+                <span id="sessionLabel">Start Workout</span>
+              </button>
+              <button class="icon-btn small" id="sessionReset" aria-label="Reset session">
+                <span class="material-symbols-rounded">restart_alt</span>
+              </button>
+            </div>
           </div>
         </div>
-      </a>
+
+        <!-- Day tabs -->
+        <div class="md-tabs" id="dayTabs">
+          <button data-day="day1" class="md-tab active">
+            <span class="material-symbols-rounded">looks_one</span>Mix
+          </button>
+          <button data-day="day2" class="md-tab">
+            <span class="material-symbols-rounded">looks_two</span>Pull
+          </button>
+          <button data-day="day3" class="md-tab">
+            <span class="material-symbols-rounded">looks_3</span>Power
+          </button>
+          <button data-day="day4" class="md-tab">
+            <span class="material-symbols-rounded">looks_4</span>Arms
+          </button>
+        </div>
+
+        <div class="exercises" id="exerciseList"></div>
+
+        <div class="row gap end mt-16" id="workoutActions">
+          <button class="btn outlined" id="cancelWorkoutBtn" style="display:none">
+            <span class="material-symbols-rounded">close</span>Cancel
+          </button>
+          <button class="btn filled" id="finishBtn" style="display:none">
+            <span class="material-symbols-rounded">check_circle</span>Finish Workout
+          </button>
+        </div>
+      </div>
+
+      <!-- Latest YouTube hero -->
+      <div class="surface-card filled">
+        <div class="card-head">
+          <h2 class="title-medium">Latest Machine Tutorial</h2>
+          <p class="body-small on-surface-variant" id="videoCaption">Pulls the freshest YouTube uploads.</p>
+        </div>
+        <a id="ytHero" class="yt-hero" target="_blank" rel="noopener" href="#">
+          <div class="yt-hero-bg"></div>
+          <div class="yt-hero-inner">
+            <div class="yt-play">
+              <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.52 7.74a8 8 0 0 0-5.62-5.66C55.94 1 34 1 34 1s-21.94 0-26.9 1.08a8 8 0 0 0-5.62 5.66A83.7 83.7 0 0 0 0 24a83.7 83.7 0 0 0 1.48 16.26 8 8 0 0 0 5.62 5.66C12.06 47 34 47 34 47s21.94 0 26.9-1.08a8 8 0 0 0 5.62-5.66A83.7 83.7 0 0 0 68 24a83.7 83.7 0 0 0-1.48-16.26z" fill="#ff0000"/><path d="M27 34l18-10-18-10z" fill="#fff"/></svg>
+            </div>
+            <div class="yt-hero-meta">
+              <div class="label-small kicker" id="ytHeroKicker">YOUTUBE · LATEST</div>
+              <div class="title-large" id="ytHeroTitle">—</div>
+              <div class="body-small on-surface-variant">Sorted by upload date</div>
+            </div>
+            <span class="material-symbols-rounded yt-arrow">arrow_outward</span>
+          </div>
+        </a>
+      </div>
     </section>
+
+    <!-- Page: History -->
+    <section class="page" id="page-history" style="display:none">
+      <div class="surface-card elevated">
+        <div class="card-head row between">
+          <div>
+            <h2 class="headline-small">History</h2>
+            <p class="body-small on-surface-variant" id="historySummary">No sessions yet.</p>
+          </div>
+          <button class="btn text" id="clearHistoryBtn">
+            <span class="material-symbols-rounded">delete_sweep</span>Clear
+          </button>
+        </div>
+        <div class="history-list" id="historyList"></div>
+      </div>
+    </section>
+
   </main>
 
   <!-- Floating rest timer -->
-  <div class="rest-dock" id="restDock">
+  <div class="rest-dock surface-card elevated" id="restDock">
     <div class="rest-head">
-      <span class="rest-title">Rest Timer</span>
+      <div class="row gap-6">
+        <span class="material-symbols-rounded rest-icon">timer</span>
+        <span class="label-small on-surface-variant">REST TIMER</span>
+      </div>
       <span class="rest-display" id="restDisplay">01:30</span>
     </div>
-    <div class="rest-presets">
+    <div class="rest-presets" id="restPresets">
       <button data-secs="45">45s</button>
       <button data-secs="60">60s</button>
       <button data-secs="90" class="active">90s</button>
@@ -94,19 +170,27 @@
       <button data-secs="180">3m</button>
     </div>
     <div class="rest-controls">
-      <button class="btn primary" id="restStart">Start</button>
-      <button class="btn ghost" id="restPause">Pause</button>
-      <button class="btn ghost" id="restReset">Reset</button>
+      <button class="btn filled small" id="restStart">
+        <span class="material-symbols-rounded">play_arrow</span>Start
+      </button>
+      <button class="icon-btn small" id="restPause" aria-label="Pause"><span class="material-symbols-rounded">pause</span></button>
+      <button class="icon-btn small" id="restReset" aria-label="Reset"><span class="material-symbols-rounded">restart_alt</span></button>
     </div>
   </div>
 
-  <footer class="foot muted">
-    Built for Vercel · static HTML/CSS/JS · no backend
-  </footer>
+  <!-- Snackbar -->
+  <div class="snackbar" id="snackbar"></div>
 
-  <audio id="dingAudio" preload="auto">
-    <source src="data:audio/wav;base64,UklGRkgAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YSQAAAA=" type="audio/wav" />
-  </audio>
+  <!-- Finish summary dialog -->
+  <div class="dialog-scrim" id="summaryScrim" style="display:none">
+    <div class="dialog surface-card elevated">
+      <h2 class="headline-small">Workout complete</h2>
+      <div id="summaryBody" class="summary-body"></div>
+      <div class="row gap end">
+        <button class="btn text" id="summaryDismiss">Dismiss</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
