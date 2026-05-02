@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#1a1b1e" />
-  <title>PPL — Push / Pull / Legs</title>
+  <meta name="theme-color" content="#16130f" />
+  <title>Workout Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&display=swap" rel="stylesheet" />
@@ -18,41 +18,44 @@
       <div class="brand">
         <span class="material-symbols-rounded brand-icon">fitness_center</span>
         <div class="brand-text">
-          <div class="brand-title">PPL Tracker</div>
+          <div class="brand-title" id="brandTitle">Workout Tracker</div>
           <div class="brand-sub" id="todaySub">—</div>
         </div>
       </div>
-      <div class="app-bar-actions">
-        <button class="icon-btn" id="historyBtn" aria-label="History">
+      <nav class="app-bar-actions">
+        <button class="nav-btn" data-nav="today" id="todayBtn" aria-label="Train">
+          <span class="material-symbols-rounded">today</span>
+          <span class="nav-label">Train</span>
+        </button>
+        <button class="nav-btn" data-nav="programs" id="programsBtn" aria-label="Programs">
+          <span class="material-symbols-rounded">view_list</span>
+          <span class="nav-label">Programs</span>
+        </button>
+        <button class="nav-btn" data-nav="history" id="historyBtn" aria-label="History">
           <span class="material-symbols-rounded">history</span>
+          <span class="nav-label">History</span>
         </button>
-        <button class="icon-btn" id="planBtn" aria-label="Plan">
-          <span class="material-symbols-rounded">calendar_month</span>
-        </button>
-      </div>
+      </nav>
     </div>
   </header>
 
   <main class="container">
 
-    <!-- Page: Today -->
+    <!-- =========================== Page: Today =========================== -->
     <section class="page" id="page-today">
 
       <!-- Week chips -->
       <div class="surface-card filled">
-        <div class="card-head">
-          <h2 class="title-medium">Your Week</h2>
-          <p class="body-small on-surface-variant">Tap a day to cycle Push → Pull → Legs → Rest. Saved automatically.</p>
-        </div>
-        <div class="week-row" id="weekGrid"></div>
-        <div class="row gap end mt-12">
-          <button class="btn text" id="presetBtn">
-            <span class="material-symbols-rounded">auto_awesome</span>Preset
-          </button>
+        <div class="card-head row between wrap">
+          <div>
+            <h2 class="title-medium">Your Week</h2>
+            <p class="body-small on-surface-variant">Tap a day to cycle through this program's days. Auto-saved.</p>
+          </div>
           <button class="btn text" id="resetWeekBtn">
             <span class="material-symbols-rounded">refresh</span>Reset
           </button>
         </div>
+        <div class="week-row" id="weekGrid"></div>
       </div>
 
       <!-- Workout card -->
@@ -60,8 +63,8 @@
         <div class="card-head row between wrap">
           <div>
             <div class="row gap-8">
-              <span class="chip-tone" id="routineChip">PUSH</span>
-              <span class="chip-outline" id="durationChip">~ 45 min</span>
+              <span class="chip-tone" id="routineChip">—</span>
+              <span class="chip-outline" id="durationChip">—</span>
             </div>
             <h2 class="headline-small mt-8" id="workoutTitle">Today's Workout</h2>
             <p class="body-small on-surface-variant" id="workoutSubtitle">—</p>
@@ -84,21 +87,8 @@
           </div>
         </div>
 
-        <!-- Day tabs -->
-        <div class="md-tabs" id="dayTabs">
-          <button data-day="day1" class="md-tab active">
-            <span class="material-symbols-rounded">looks_one</span>Mix
-          </button>
-          <button data-day="day2" class="md-tab">
-            <span class="material-symbols-rounded">looks_two</span>Pull
-          </button>
-          <button data-day="day3" class="md-tab">
-            <span class="material-symbols-rounded">looks_3</span>Power
-          </button>
-          <button data-day="day4" class="md-tab">
-            <span class="material-symbols-rounded">looks_4</span>Arms
-          </button>
-        </div>
+        <!-- Day tabs (rendered dynamically) -->
+        <div class="md-tabs" id="dayTabs"></div>
 
         <div class="exercises" id="exerciseList"></div>
 
@@ -115,8 +105,8 @@
       <!-- Latest YouTube hero -->
       <div class="surface-card filled">
         <div class="card-head">
-          <h2 class="title-medium">Latest Machine Tutorial</h2>
-          <p class="body-small on-surface-variant" id="videoCaption">Pulls the freshest YouTube uploads.</p>
+          <h2 class="title-medium">Warm-Up Tutorial</h2>
+          <p class="body-small on-surface-variant" id="videoCaption">Tap to watch the program's warm-up routine.</p>
         </div>
         <a id="ytHero" class="yt-hero" target="_blank" rel="noopener" href="#">
           <div class="yt-hero-bg"></div>
@@ -125,9 +115,9 @@
               <svg viewBox="0 0 68 48" width="60" height="42"><path d="M66.52 7.74a8 8 0 0 0-5.62-5.66C55.94 1 34 1 34 1s-21.94 0-26.9 1.08a8 8 0 0 0-5.62 5.66A83.7 83.7 0 0 0 0 24a83.7 83.7 0 0 0 1.48 16.26 8 8 0 0 0 5.62 5.66C12.06 47 34 47 34 47s21.94 0 26.9-1.08a8 8 0 0 0 5.62-5.66A83.7 83.7 0 0 0 68 24a83.7 83.7 0 0 0-1.48-16.26z" fill="#ff0000"/><path d="M27 34l18-10-18-10z" fill="#fff"/></svg>
             </div>
             <div class="yt-hero-meta">
-              <div class="label-small kicker" id="ytHeroKicker">YOUTUBE · LATEST</div>
+              <div class="label-small kicker" id="ytHeroKicker">WARM-UP</div>
               <div class="title-large" id="ytHeroTitle">—</div>
-              <div class="body-small on-surface-variant">Sorted by upload date</div>
+              <div class="body-small on-surface-variant">Open on YouTube</div>
             </div>
             <span class="material-symbols-rounded yt-arrow">arrow_outward</span>
           </div>
@@ -135,7 +125,76 @@
       </div>
     </section>
 
-    <!-- Page: History -->
+    <!-- =========================== Page: Programs =========================== -->
+    <section class="page" id="page-programs" style="display:none">
+      <div class="surface-card elevated">
+        <div class="card-head row between wrap">
+          <div>
+            <h2 class="headline-small">Workout Programs</h2>
+            <p class="body-small on-surface-variant">Pick a built-in plan, or create your own splits and routines.</p>
+          </div>
+          <button class="btn filled" id="newProgramBtn">
+            <span class="material-symbols-rounded">add</span>Create Program
+          </button>
+        </div>
+        <div class="programs-list" id="programsList"></div>
+      </div>
+    </section>
+
+    <!-- =========================== Page: Editor =========================== -->
+    <section class="page" id="page-editor" style="display:none">
+      <div class="surface-card elevated">
+        <div class="card-head row between wrap">
+          <div class="row gap-8">
+            <button class="icon-btn" id="editorBackBtn" aria-label="Back to programs">
+              <span class="material-symbols-rounded">arrow_back</span>
+            </button>
+            <div>
+              <h2 class="headline-small" id="editorTitle">Create Program</h2>
+              <p class="body-small on-surface-variant">Design your split: name it, add days, fill in exercises.</p>
+            </div>
+          </div>
+        </div>
+
+        <form id="editorForm" class="editor-form" onsubmit="return false;">
+          <div class="editor-section">
+            <label class="field-label">
+              <span>Program name</span>
+              <input class="input-field" type="text" id="editorNameInput" placeholder="e.g. My Push/Pull/Legs" autocomplete="off" />
+            </label>
+            <label class="field-label">
+              <span>Subtitle <span class="on-surface-variant body-small">(optional)</span></span>
+              <input class="input-field" type="text" id="editorSubtitleInput" placeholder="e.g. 6-day intermediate split" autocomplete="off" />
+            </label>
+          </div>
+
+          <div class="editor-section">
+            <div class="row between">
+              <h3 class="title-medium">Days</h3>
+              <button class="btn text small" id="addDayBtn" type="button">
+                <span class="material-symbols-rounded">add</span>Add day
+              </button>
+            </div>
+            <div id="editorDays" class="editor-days"></div>
+          </div>
+
+          <div class="editor-section">
+            <h3 class="title-medium">Default schedule</h3>
+            <p class="body-small on-surface-variant">Used when you switch to this program. Adjustable any time later.</p>
+            <div class="editor-week-row" id="editorWeekRow"></div>
+          </div>
+
+          <div class="row gap end mt-16">
+            <button class="btn outlined" id="editorCancelBtn" type="button">Cancel</button>
+            <button class="btn filled" id="editorSaveBtn" type="button">
+              <span class="material-symbols-rounded">check</span>Save Program
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- =========================== Page: History =========================== -->
     <section class="page" id="page-history" style="display:none">
       <div class="surface-card elevated">
         <div class="card-head row between">

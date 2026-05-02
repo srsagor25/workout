@@ -119,7 +119,53 @@ html, body {
 }
 .brand-text .brand-title { font-size: 18px; font-weight: 600; }
 .brand-text .brand-sub { font-size: 12px; color: var(--md-on-surface-variant); }
-.app-bar-actions { display: flex; gap: 4px; }
+
+.app-bar-actions { display: flex; gap: 2px; }
+.nav-btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  border-radius: var(--shape-m);
+  color: var(--md-on-surface-variant);
+  font-family: inherit;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.15s, background 0.15s;
+}
+.nav-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+.nav-btn:hover::before { opacity: 0.06; }
+.nav-btn:hover { color: var(--md-on-surface); }
+.nav-btn .material-symbols-rounded { font-size: 22px; }
+.nav-btn .nav-label {
+  font-size: 10px;
+  letter-spacing: 0.4px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.nav-btn.active {
+  color: var(--md-primary);
+}
+.nav-btn.active::before {
+  background: var(--md-primary);
+  opacity: 0.12;
+}
+@media (max-width: 540px) {
+  .nav-btn { padding: 6px 8px; }
+  .nav-btn .nav-label { display: none; }
+}
 
 /* ============================================================
    Container & cards
@@ -281,10 +327,14 @@ html, body {
   border-radius: var(--shape-s);
   display: block;
 }
-.week-day[data-routine="push"] .day-tag { background: rgba(255, 138, 114, 0.18); color: var(--r-push); }
-.week-day[data-routine="pull"] .day-tag { background: rgba(148, 184, 255, 0.18); color: var(--r-pull); }
-.week-day[data-routine="legs"] .day-tag { background: rgba(146, 220, 166, 0.20); color: var(--r-legs); }
-.week-day[data-routine="rest"] .day-tag { background: rgba(182, 182, 182, 0.16); color: var(--r-rest); }
+.week-day .day-tag.is-day {
+  background: color-mix(in srgb, var(--accent, #ff8a72) 18%, transparent);
+  color: var(--accent, #ff8a72);
+}
+.week-day .day-tag.is-rest {
+  background: rgba(182, 182, 182, 0.14);
+  color: var(--r-rest);
+}
 
 @media (max-width: 600px) {
   .week-day { padding: 10px 2px; }
@@ -702,4 +752,246 @@ html, body {
   padding: 32px;
   text-align: center;
   color: var(--md-on-surface-variant);
+}
+
+/* ============================================================
+   Empty state (inside exercise list, etc.)
+============================================================ */
+.exercise.empty-state {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  padding: 32px 20px;
+  text-align: center;
+}
+.exercise.empty-state .big {
+  font-size: 44px;
+  color: var(--md-on-surface-variant);
+  opacity: 0.5;
+}
+.exercise.empty-state p { margin: 0; max-width: 360px; }
+
+/* ============================================================
+   Danger variant for buttons
+============================================================ */
+.btn.text.danger { --btn-fg: var(--md-error); }
+.icon-btn.danger { color: var(--md-error); }
+.icon-btn.danger:hover { color: var(--md-error); }
+
+/* ============================================================
+   Programs page
+============================================================ */
+.programs-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+.program-card {
+  background: var(--md-surface-container-high);
+  border-radius: var(--shape-l);
+  padding: 16px 18px;
+  border: 1.5px solid transparent;
+  transition: border-color 0.15s, background 0.15s;
+}
+.program-card.active {
+  border-color: var(--md-primary);
+  background: var(--md-surface-container-highest);
+}
+.program-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.program-name {
+  font-size: 16px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.active-badge { background: var(--md-primary); color: var(--md-on-primary); }
+.builtin-badge { background: var(--md-surface-container); color: var(--md-on-surface-variant); border: 1px solid var(--md-outline-variant); }
+.custom-badge { background: var(--md-tertiary); color: var(--md-on-tertiary); }
+.program-sub { margin-top: 2px; }
+.program-meta { font-size: 12px; }
+.program-day-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.day-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent, #888) 18%, transparent);
+  color: var(--accent, #ddd);
+  letter-spacing: 0.2px;
+}
+.program-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+  align-items: center;
+}
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--md-success);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+}
+
+/* ============================================================
+   Program editor
+============================================================ */
+.editor-form {
+  display: grid;
+  gap: 22px;
+  margin-top: 18px;
+}
+.editor-section {
+  display: grid;
+  gap: 12px;
+}
+.field-label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--md-on-surface-variant);
+}
+.field-label .input-field { font-size: 15px; padding: 12px 14px; }
+
+.editor-days {
+  display: grid;
+  gap: 14px;
+}
+.editor-day {
+  background: var(--md-surface-container);
+  border: 1px solid var(--md-outline-variant);
+  border-left: 4px solid var(--accent, #ff8a72);
+  border-radius: var(--shape-l);
+  padding: 14px 16px;
+}
+.editor-day-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.editor-day-head-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+.editor-day-head-left .day-icon {
+  font-size: 22px;
+  color: var(--accent, #ff8a72);
+}
+.day-name-input {
+  font-size: 15px;
+  font-weight: 600;
+  flex: 1;
+  max-width: 280px;
+}
+.editor-exercises {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.editor-empty {
+  padding: 12px;
+  background: var(--md-surface-container-low);
+  border-radius: var(--shape-s);
+  text-align: center;
+}
+.editor-ex {
+  background: var(--md-surface-container-low);
+  border-radius: var(--shape-m);
+  padding: 10px 12px;
+  display: grid;
+  gap: 8px;
+}
+.editor-ex-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) 78px 78px 88px 36px;
+  gap: 8px;
+  align-items: end;
+}
+.num-label {
+  display: grid;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--md-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.num-label .input-field { padding: 7px 9px; font-size: 13px; }
+.url-input { font-size: 13px; padding: 8px 10px; }
+.add-ex-btn { padding-left: 8px; padding-right: 8px; }
+
+.editor-week-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+.editor-week-cell {
+  display: grid;
+  gap: 4px;
+  background: var(--md-surface-container);
+  padding: 8px 6px;
+  border-radius: var(--shape-m);
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--md-on-surface-variant);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+.editor-week-cell select.input-field {
+  text-transform: none;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 4px;
+  letter-spacing: 0;
+  text-align: center;
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--md-surface-container-low);
+}
+
+@media (max-width: 700px) {
+  .editor-ex-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+      "name name name"
+      "sets reps rest"
+      "del  del  del";
+  }
+  .editor-ex-grid .ex-name { grid-area: name; }
+  .editor-ex-grid .num-label:nth-of-type(1) { grid-area: sets; }
+  .editor-ex-grid .num-label:nth-of-type(2) { grid-area: reps; }
+  .editor-ex-grid .num-label:nth-of-type(3) { grid-area: rest; }
+  .editor-ex-grid [data-action="del-ex"] { grid-area: del; justify-self: end; }
+  .editor-week-row { grid-template-columns: repeat(4, 1fr); }
 }
