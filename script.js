@@ -975,6 +975,7 @@ const DAY_ICONS   = ['fitness_center', 'arrow_upward', 'arrow_downward', 'direct
 
 function openEditor(mode, source) {
   if (mode === 'create') {
+    const days = Array.from({ length: 7 }, (_, i) => makeBlankDay(i));
     editorState = {
       mode,
       program: {
@@ -982,8 +983,9 @@ function openEditor(mode, source) {
         name: '',
         subtitle: '',
         builtin: false,
-        days: [makeBlankDay(0)],
-        defaultWeek: ['rest','rest','rest','rest','rest','rest','rest'],
+        days,
+        // Sun → Day 1, Mon → Day 2, … Sat → Day 7. Swap any slot to Rest later.
+        defaultWeek: days.map((d) => d.id),
       },
     };
     editorTitle.textContent = 'Create Program';
