@@ -30,7 +30,7 @@ const BUILTIN_PROGRAMS = {
           { id: 'd1e2', name: 'Bench Press',       sets: 4, reps: 8,  restSec: 150, url: 'https://youtu.be/SCVCLChPQFY?si=MbIdKTjcoMBKGHcs' },
           { id: 'd1e3', name: 'Barbell Row',       sets: 4, reps: 8,  restSec: 90,  url: 'https://youtu.be/6FZHJGzMFEc?si=EPrKQ-nMZI8O95o8' },
           { id: 'd1e4', name: 'Dumbbell Curl',     sets: 3, reps: 11, restSec: 60,  url: 'https://youtu.be/HnHuhf4hEWY?si=cLp6Onrbvwd1MdzV' },
-          { id: 'd1e5', name: 'Hanging Leg Raise', sets: 3, reps: 15, restSec: 60,  url: '' },
+          { id: 'd1e5', name: 'Hanging Leg Raise', sets: 3, reps: 15, restSec: 60,  url: 'https://www.youtube.com/watch?v=Pr1ieGZ5atk' },
         ],
       },
       {
@@ -38,7 +38,7 @@ const BUILTIN_PROGRAMS = {
         exercises: [
           { id: 'd2e1', name: 'Deadlift',       sets: 5, reps: 6,  restSec: 150, url: 'https://youtu.be/AweC3UaM14o?si=EpmzLOqYdL5edfmi' },
           { id: 'd2e2', name: 'Overhead Press', sets: 4, reps: 8,  restSec: 120, url: 'https://youtu.be/cGnhixvC8uA?si=A3JcKPo0jkHe9X5c' },
-          { id: 'd2e3', name: 'Pull-Up',        sets: 4, reps: 9,  restSec: 120, url: '' },
+          { id: 'd2e3', name: 'Pull-Up',        sets: 4, reps: 9,  restSec: 120, url: 'https://www.youtube.com/watch?v=sIvJTfGxdFo' },
           { id: 'd2e4', name: 'Face Pull',      sets: 3, reps: 15, restSec: 60,  url: 'https://youtu.be/0Po47vvj9g4?si=gZtsKeLP6hKinp5E' },
           { id: 'd2e5', name: 'Rope Pushdown',  sets: 3, reps: 13, restSec: 60,  url: 'https://youtu.be/-xa-6cQaZKY?si=84EsGv9_4u7zyCKa' },
         ],
@@ -50,7 +50,7 @@ const BUILTIN_PROGRAMS = {
           { id: 'd3e2', name: 'Incline Dumbbell Press', sets: 4, reps: 9,  restSec: 120, url: 'https://youtu.be/5CECBjd7HLQ?si=L6I2RvdiWKGXMe8I' },
           { id: 'd3e3', name: 'Seated Row',             sets: 4, reps: 10, restSec: 60,  url: 'https://youtu.be/lJoozxC0Rns?si=KRIZgwtBUkvMv9gt' },
           { id: 'd3e4', name: 'Calf Raise',             sets: 3, reps: 17, restSec: 60,  url: 'https://youtu.be/_iYwv4QVFjM?si=ao4HVUbmomEmvp8u' },
-          { id: 'd3e5', name: 'Plank (60s hold)',       sets: 3, reps: 20, restSec: 60,  url: '' },
+          { id: 'd3e5', name: 'Plank (60s hold)',       sets: 3, reps: 20, restSec: 60,  url: 'https://www.youtube.com/watch?v=mwlp75MS6Rg' },
         ],
       },
       {
